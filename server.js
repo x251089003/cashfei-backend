@@ -7,23 +7,37 @@ const applicationsRouter = require('./routes/applications');
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'OPTIONS'],
+  allowedHeaders: ['Content-Type'],
+}));
 app.use(express.json());
 
-// MongoDB connection (cached for serverless)
-let isConnected = false;
+// MongoDB connection (optimized for serverless)
+let cached = global._mongooseConn;
+if (!cached) cached = global._mongooseConn = { conn: null, promise: null };
+
 async function connectDB() {
-  if (isConnected) return;
-  await mongoose.connect(process.env.MONGODB_URI);
-  isConnected = true;
+  if (cached.conn) return cached.conn;
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(process.env.MONGODB_URI, {
+      bufferCommands: false,
+      serverSelectionTimeoutMS: 5000,
+      connectTimeoutMS: 5000,
+    });
+  }
+  cached.conn = await cached.promise;
+  return cached.conn;
 }
 
-// Ensure DB is connected before handling requests
+// Ensure DB connected before handling requests
 app.use(async (req, res, next) => {
   try {
     await connectDB();
     next();
   } catch (err) {
+    console.error('DB error:', err.message);
     res.status(500).json({ error: 'Database connection failed' });
   }
 });

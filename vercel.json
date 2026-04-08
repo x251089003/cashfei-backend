@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "regions": ["fra1"],
   "builds": [
     { "src": "server.js", "use": "@vercel/node" }
   ],
@@ -10,9 +11,10 @@
       "headers": {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET, POST, PUT, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type"
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Max-Age": "86400"
       },
-      "dest": "server.js"
+      "continue": true
     },
     { "src": "/api/(.*)", "dest": "server.js" }
   ]
