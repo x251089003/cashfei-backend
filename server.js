@@ -23,8 +23,6 @@ async function connectDB() {
   if (!cached.promise) {
     cached.promise = mongoose.connect(process.env.MONGODB_URI, {
       bufferCommands: false,
-      serverSelectionTimeoutMS: 5000,
-      connectTimeoutMS: 5000,
     });
   }
   cached.conn = await cached.promise;
@@ -38,7 +36,9 @@ app.use(async (req, res, next) => {
     next();
   } catch (err) {
     console.error('DB error:', err.message);
-    res.status(500).json({ error: 'Database connection failed' });
+    cached.promise = null;
+    cached.conn = null;
+    res.status(500).json({ error: 'Database connection failed', detail: err.message });
   }
 });
 
