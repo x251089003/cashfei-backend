@@ -4,6 +4,16 @@
     { "src": "server.js", "use": "@vercel/node" }
   ],
   "routes": [
+    {
+      "src": "/api/(.*)",
+      "methods": ["OPTIONS"],
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type"
+      },
+      "dest": "server.js"
+    },
     { "src": "/api/(.*)", "dest": "server.js" }
   ]
 }
