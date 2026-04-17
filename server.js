@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const applicationsRouter = require('./routes/applications');
+const clicksRouter = require('./routes/clicks');
 
 const app = express();
 
@@ -44,6 +45,7 @@ app.use(async (req, res, next) => {
 
 // Routes
 app.use('/api/applications', applicationsRouter);
+app.use('/api/clicks', clicksRouter);
 
 // Health check
 app.get('/api/health', (req, res) => {
