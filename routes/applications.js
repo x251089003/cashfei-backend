@@ -63,7 +63,7 @@ router.put('/:id/step/:step', async (req, res) => {
     // Mark completed on step 6
     if (stepNum === 6) {
       update.completed = true;
-      update.referenceNumber = 'CF-' + Date.now().toString(36).toUpperCase().slice(-6);
+      update.referenceNumber = 'ML-' + Date.now().toString(36).toUpperCase().slice(-6);
     }
 
     const app = await Application.findByIdAndUpdate(id, update, { new: true });

@@ -1,7 +1,7 @@
 {
-  "name": "cashfei-backend",
+  "name": "meloan-backend",
   "version": "1.0.0",
-  "description": "Cashfei loan application backend API",
+  "description": "Meloan loan application backend API",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
